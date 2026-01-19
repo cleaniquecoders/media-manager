@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:spatie.be)",
+      "WebFetch(domain:livewire.laravel.com)",
+      "Bash(composer format:*)",
+      "Bash(composer analyse:*)",
+      "Bash(composer test:*)"
+    ]
+  }
+}
