@@ -2,7 +2,7 @@
 
 namespace CleaniqueCoders\MediaManager\Tests\Fixtures;
 
-use CleaniqueCoders\MediaManager\Models\Traits\HasMediaManager;
+use CleaniqueCoders\MediaManager\Concerns\HasMediaManager;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 

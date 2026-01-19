@@ -42,7 +42,7 @@ class MediaManagerCommand extends Command
 
         $this->newLine();
         $this->components->info('Example model usage:');
-        $this->line('  use CleaniqueCoders\MediaManager\Models\Traits\HasMediaManager;');
+        $this->line('  use CleaniqueCoders\MediaManager\Concerns\HasMediaManager;');
         $this->line('  use Spatie\MediaLibrary\HasMedia;');
         $this->newLine();
         $this->line('  class Post extends Model implements HasMedia');

@@ -2,7 +2,7 @@
 
 namespace CleaniqueCoders\MediaManager\Livewire;
 
-use CleaniqueCoders\MediaManager\Livewire\Concerns\HandlesPreview;
+use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;

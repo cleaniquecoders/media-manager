@@ -1,6 +1,6 @@
 <?php
 
-namespace CleaniqueCoders\MediaManager\Livewire\Concerns;
+namespace CleaniqueCoders\MediaManager\Concerns;
 
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Http\UploadedFile;

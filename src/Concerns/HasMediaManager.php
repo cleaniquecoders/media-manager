@@ -1,6 +1,6 @@
 <?php
 
-namespace CleaniqueCoders\MediaManager\Models\Traits;
+namespace CleaniqueCoders\MediaManager\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\UploadedFile;

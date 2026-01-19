@@ -2,8 +2,8 @@
 
 namespace CleaniqueCoders\MediaManager\Livewire;
 
-use CleaniqueCoders\MediaManager\Livewire\Concerns\HandlesPreview;
-use CleaniqueCoders\MediaManager\Livewire\Concerns\HandlesUpload;
+use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
+use CleaniqueCoders\MediaManager\Concerns\HandlesUpload;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
