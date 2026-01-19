@@ -2,9 +2,9 @@
 
 namespace CleaniqueCoders\MediaManager\Tests;
 
+use CleaniqueCoders\MediaManager\MediaManagerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use CleaniqueCoders\MediaManager\MediaManagerServiceProvider;
 
 class TestCase extends Orchestra
 {

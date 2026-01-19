@@ -2,9 +2,9 @@
 
 namespace CleaniqueCoders\MediaManager;
 
+use CleaniqueCoders\MediaManager\Commands\MediaManagerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use CleaniqueCoders\MediaManager\Commands\MediaManagerCommand;
 
 class MediaManagerServiceProvider extends PackageServiceProvider
 {
