@@ -12,7 +12,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class MediaPicker extends Component
+class Picker extends Component
 {
     use HandlesPreview;
     use WithPagination;

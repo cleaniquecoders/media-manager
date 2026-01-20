@@ -1,6 +1,6 @@
 <?php
 
-use CleaniqueCoders\MediaManager\Livewire\MediaBrowser;
+use CleaniqueCoders\MediaManager\Livewire\Browser;
 use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 use Workbench\App\Models\User;
@@ -16,13 +16,13 @@ beforeEach(function () {
 });
 
 it('can render the media browser component', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->assertStatus(200)
         ->assertViewIs('media-manager::livewire.media-browser');
 });
 
 it('can toggle between grid and list view', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->assertSet('view', 'grid')
         ->call('toggleView')
         ->assertSet('view', 'list')
@@ -31,7 +31,7 @@ it('can toggle between grid and list view', function () {
 });
 
 it('can set view directly', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('setView', 'list')
         ->assertSet('view', 'list')
         ->call('setView', 'grid')
@@ -39,25 +39,25 @@ it('can set view directly', function () {
 });
 
 it('can filter by search term', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->set('search', 'test document')
         ->assertSet('search', 'test document');
 });
 
 it('can filter by collection', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->set('collection', 'documents')
         ->assertSet('collection', 'documents');
 });
 
 it('can filter by type', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->set('type', 'image')
         ->assertSet('type', 'image');
 });
 
 it('can clear all filters', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->set('search', 'test')
         ->set('collection', 'documents')
         ->set('type', 'image')
@@ -76,7 +76,7 @@ it('can select and deselect media', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('toggleSelect', $media->id)
         ->assertSet('selected', [$media->id])
         ->call('toggleSelect', $media->id)
@@ -87,7 +87,7 @@ it('can open and close preview', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('openPreview', $media->id)
         ->assertSet('previewMediaId', $media->id)
         ->call('closePreview')
@@ -95,7 +95,7 @@ it('can open and close preview', function () {
 });
 
 it('can confirm and cancel delete', function () {
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('confirmDelete')
         ->assertSet('showDeleteConfirm', true)
         ->call('cancelDelete')
@@ -108,7 +108,7 @@ it('can deselect all media', function () {
     $media1 = $this->user->addMedia($file1)->toMediaCollection('default');
     $media2 = $this->user->addMedia($file2)->toMediaCollection('default');
 
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('toggleSelect', $media1->id)
         ->call('toggleSelect', $media2->id)
         ->assertSet('selected', [$media1->id, $media2->id])
@@ -120,7 +120,7 @@ it('can delete selected media', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('toggleSelect', $media->id)
         ->call('deleteSelected')
         ->assertSet('selected', [])
@@ -134,7 +134,7 @@ it('can delete single media', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaBrowser::class)
+    Livewire::test(Browser::class)
         ->call('openPreview', $media->id)
         ->call('deleteSingle', $media->id)
         ->assertSet('previewMediaId', null)
@@ -144,7 +144,7 @@ it('can delete single media', function () {
 });
 
 it('provides type options', function () {
-    $component = Livewire::test(MediaBrowser::class);
+    $component = Livewire::test(Browser::class);
 
     expect($component->get('typeOptions'))->toBeArray()
         ->toHaveKeys(['image', 'video', 'audio', 'pdf', 'document', 'spreadsheet']);

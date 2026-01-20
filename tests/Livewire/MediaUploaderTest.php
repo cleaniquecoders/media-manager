@@ -1,6 +1,6 @@
 <?php
 
-use CleaniqueCoders\MediaManager\Livewire\MediaUploader;
+use CleaniqueCoders\MediaManager\Livewire\Uploader;
 use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 use Workbench\App\Models\User;
@@ -16,7 +16,7 @@ beforeEach(function () {
 });
 
 it('can render with model binding', function () {
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
         'collection' => 'avatar',
     ])
@@ -27,7 +27,7 @@ it('can render with model binding', function () {
 });
 
 it('can set max files limit', function () {
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
         'maxFiles' => 5,
     ])
@@ -35,7 +35,7 @@ it('can set max files limit', function () {
 });
 
 it('can set accepted types', function () {
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
         'acceptedTypes' => ['image/jpeg', 'image/png'],
     ])
@@ -46,7 +46,7 @@ it('loads existing media when model is provided', function () {
     $file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
     $this->user->addMedia($file)->toMediaCollection('avatar');
 
-    $component = Livewire::test(MediaUploader::class, [
+    $component = Livewire::test(Uploader::class, [
         'model' => $this->user,
         'collection' => 'avatar',
     ]);
@@ -58,7 +58,7 @@ it('can remove existing media', function () {
     $file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('avatar');
 
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
         'collection' => 'avatar',
     ])
@@ -69,7 +69,7 @@ it('can remove existing media', function () {
 });
 
 it('does not save when there are no uploads', function () {
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
         'collection' => 'documents',
     ])
@@ -80,7 +80,7 @@ it('does not save when there are no uploads', function () {
 });
 
 it('can update custom property values', function () {
-    Livewire::test(MediaUploader::class, [
+    Livewire::test(Uploader::class, [
         'model' => $this->user,
     ])
         ->call('updatePropertyValue', 0, 'alt', 'Alternative text')
@@ -91,7 +91,7 @@ it('can remove a pending upload from uploads array', function () {
     $file1 = UploadedFile::fake()->image('test1.jpg', 100, 100);
     $file2 = UploadedFile::fake()->image('test2.jpg', 100, 100);
 
-    $component = Livewire::test(MediaUploader::class, [
+    $component = Livewire::test(Uploader::class, [
         'model' => $this->user,
     ])
         ->set('uploads', [$file1, $file2])

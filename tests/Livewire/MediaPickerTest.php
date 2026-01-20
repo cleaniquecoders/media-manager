@@ -1,6 +1,6 @@
 <?php
 
-use CleaniqueCoders\MediaManager\Livewire\MediaPicker;
+use CleaniqueCoders\MediaManager\Livewire\Picker;
 use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 use Workbench\App\Models\User;
@@ -16,32 +16,32 @@ beforeEach(function () {
 });
 
 it('can render the media picker component', function () {
-    Livewire::test(MediaPicker::class)
+    Livewire::test(Picker::class)
         ->assertStatus(200);
 });
 
 it('can enable multiple selection', function () {
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => true,
     ])
         ->assertSet('multiple', true);
 });
 
 it('can disable multiple selection', function () {
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => false,
     ])
         ->assertSet('multiple', false);
 });
 
 it('can search media', function () {
-    Livewire::test(MediaPicker::class)
+    Livewire::test(Picker::class)
         ->set('search', 'test document')
         ->assertSet('search', 'test document');
 });
 
 it('can open and close picker', function () {
-    Livewire::test(MediaPicker::class)
+    Livewire::test(Picker::class)
         ->call('openPicker')
         ->assertSet('isOpen', true)
         ->call('closePicker')
@@ -52,7 +52,7 @@ it('can toggle media selection in single mode', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => false,
     ])
         ->call('toggleSelect', $media->id)
@@ -65,7 +65,7 @@ it('can toggle media selection in multiple mode', function () {
     $media1 = $this->user->addMedia($file1)->toMediaCollection('default');
     $media2 = $this->user->addMedia($file2)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => true,
     ])
         ->call('toggleSelect', $media1->id)
@@ -79,7 +79,7 @@ it('replaces selection in single mode', function () {
     $media1 = $this->user->addMedia($file1)->toMediaCollection('default');
     $media2 = $this->user->addMedia($file2)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => false,
     ])
         ->call('toggleSelect', $media1->id)
@@ -92,7 +92,7 @@ it('can confirm selection and dispatch event', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'multiple' => false,
     ])
         ->call('openPicker')
@@ -106,7 +106,7 @@ it('can remove selected media', function () {
     $file = UploadedFile::fake()->image('test.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'selectedIds' => [$media->id],
     ])
         ->call('removeSelected', $media->id)
@@ -119,7 +119,7 @@ it('can clear all selections', function () {
     $media1 = $this->user->addMedia($file1)->toMediaCollection('default');
     $media2 = $this->user->addMedia($file2)->toMediaCollection('default');
 
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'selectedIds' => [$media1->id, $media2->id],
     ])
         ->call('clearSelection')
@@ -127,14 +127,14 @@ it('can clear all selections', function () {
 });
 
 it('can filter by collection', function () {
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'collection' => 'images',
     ])
         ->assertSet('collection', 'images');
 });
 
 it('can filter by type', function () {
-    Livewire::test(MediaPicker::class, [
+    Livewire::test(Picker::class, [
         'type' => 'image',
     ])
         ->assertSet('type', 'image');

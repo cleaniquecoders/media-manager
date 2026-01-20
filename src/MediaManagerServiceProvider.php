@@ -4,10 +4,10 @@ namespace CleaniqueCoders\MediaManager;
 
 use CleaniqueCoders\MediaManager\Commands\MediaManagerCommand;
 use CleaniqueCoders\MediaManager\Http\Middleware\AuthorizeMediaManager;
-use CleaniqueCoders\MediaManager\Livewire\MediaBrowser;
-use CleaniqueCoders\MediaManager\Livewire\MediaCollection;
-use CleaniqueCoders\MediaManager\Livewire\MediaPicker;
-use CleaniqueCoders\MediaManager\Livewire\MediaUploader;
+use CleaniqueCoders\MediaManager\Livewire\Browser;
+use CleaniqueCoders\MediaManager\Livewire\Collection;
+use CleaniqueCoders\MediaManager\Livewire\Picker;
+use CleaniqueCoders\MediaManager\Livewire\Uploader;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use CleaniqueCoders\MediaManager\Support\MediaFilter;
 use Illuminate\Support\Facades\Route;
@@ -64,10 +64,16 @@ class MediaManagerServiceProvider extends PackageServiceProvider
 
     protected function registerLivewireComponents(): void
     {
-        Livewire::component('media-manager::browser', MediaBrowser::class);
-        Livewire::component('media-manager::uploader', MediaUploader::class);
-        Livewire::component('media-manager::collection', MediaCollection::class);
-        Livewire::component('media-manager::picker', MediaPicker::class);
+        // Livewire 4 uses addNamespace on the facade
+        // Livewire 3 requires explicit component registration
+        if (method_exists(Livewire::getFacadeRoot(), 'addNamespace')) {
+            Livewire::addNamespace('media-manager', 'CleaniqueCoders\\MediaManager\\Livewire');
+        } else {
+            Livewire::component('media-manager::browser', Browser::class);
+            Livewire::component('media-manager::uploader', Uploader::class);
+            Livewire::component('media-manager::collection', Collection::class);
+            Livewire::component('media-manager::picker', Picker::class);
+        }
     }
 
     protected function registerRoutes(): void

@@ -1,6 +1,6 @@
 <?php
 
-use CleaniqueCoders\MediaManager\Livewire\MediaCollection;
+use CleaniqueCoders\MediaManager\Livewire\Collection;
 use Illuminate\Http\UploadedFile;
 use Livewire\Livewire;
 use Workbench\App\Models\User;
@@ -16,7 +16,7 @@ beforeEach(function () {
 });
 
 it('can render with model binding', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ])
@@ -25,7 +25,7 @@ it('can render with model binding', function () {
 });
 
 it('can enable sortable mode', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'sortable' => true,
     ])
@@ -33,7 +33,7 @@ it('can enable sortable mode', function () {
 });
 
 it('can disable sortable mode', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'sortable' => false,
     ])
@@ -41,7 +41,7 @@ it('can disable sortable mode', function () {
 });
 
 it('can set max files limit', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'maxFiles' => 10,
     ])
@@ -49,7 +49,7 @@ it('can set max files limit', function () {
 });
 
 it('can toggle upload zone', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
     ])
         ->assertSet('showUploadZone', false)
@@ -63,7 +63,7 @@ it('loads existing media when model is provided', function () {
     $this->user->addMedia($file1)->toMediaCollection('gallery');
     $this->user->addMedia($file2)->toMediaCollection('gallery');
 
-    $component = Livewire::test(MediaCollection::class, [
+    $component = Livewire::test(Collection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ]);
@@ -75,7 +75,7 @@ it('can remove existing media', function () {
     $file = UploadedFile::fake()->image('image.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('gallery');
 
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ])
@@ -89,7 +89,7 @@ it('can toggle edit mode for a media item', function () {
     $file = UploadedFile::fake()->image('image.jpg', 100, 100);
     $media = $this->user->addMedia($file)->toMediaCollection('gallery');
 
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ])
@@ -100,7 +100,7 @@ it('can toggle edit mode for a media item', function () {
 });
 
 it('does not upload when there are no files', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ])
@@ -109,7 +109,7 @@ it('does not upload when there are no files', function () {
 });
 
 it('can remove a pending upload from array', function () {
-    Livewire::test(MediaCollection::class, [
+    Livewire::test(Collection::class, [
         'model' => $this->user,
     ])
         ->set('uploads', ['file1', 'file2'])

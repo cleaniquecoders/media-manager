@@ -15,7 +15,7 @@ use Livewire\WithFileUploads;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class MediaCollection extends Component
+class Collection extends Component
 {
     use HandlesPreview;
     use HandlesUpload;

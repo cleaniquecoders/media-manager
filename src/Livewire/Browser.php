@@ -12,7 +12,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class MediaBrowser extends Component
+class Browser extends Component
 {
     use HandlesPreview;
     use WithPagination;
