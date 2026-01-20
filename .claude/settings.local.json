@@ -14,7 +14,8 @@
       "Bash(vendor/bin/pest:*)",
       "Bash(./vendor/bin/testbench migrate:*)",
       "Bash(./vendor/bin/testbench db:seed:*)",
-      "Bash(markdownlint:*)"
+      "Bash(markdownlint:*)",
+      "WebSearch"
     ]
   }
 }
