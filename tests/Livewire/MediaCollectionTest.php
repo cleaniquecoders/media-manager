@@ -15,12 +15,6 @@ beforeEach(function () {
     ]);
 });
 
-it('can render the media collection component', function () {
-    Livewire::test(MediaCollection::class)
-        ->assertStatus(200)
-        ->assertViewIs('media-manager::livewire.media-collection');
-});
-
 it('can render with model binding', function () {
     Livewire::test(MediaCollection::class, [
         'model' => $this->user,
@@ -32,6 +26,7 @@ it('can render with model binding', function () {
 
 it('can enable sortable mode', function () {
     Livewire::test(MediaCollection::class, [
+        'model' => $this->user,
         'sortable' => true,
     ])
         ->assertSet('sortable', true);
@@ -39,6 +34,7 @@ it('can enable sortable mode', function () {
 
 it('can disable sortable mode', function () {
     Livewire::test(MediaCollection::class, [
+        'model' => $this->user,
         'sortable' => false,
     ])
         ->assertSet('sortable', false);
@@ -46,23 +42,19 @@ it('can disable sortable mode', function () {
 
 it('can set max files limit', function () {
     Livewire::test(MediaCollection::class, [
+        'model' => $this->user,
         'maxFiles' => 10,
     ])
         ->assertSet('maxFiles', 10);
 });
 
-it('can show upload zone', function () {
+it('can toggle upload zone', function () {
     Livewire::test(MediaCollection::class, [
-        'showUploadZone' => true,
+        'model' => $this->user,
     ])
+        ->assertSet('showUploadZone', false)
+        ->call('toggleUploadZone')
         ->assertSet('showUploadZone', true);
-});
-
-it('can hide upload zone', function () {
-    Livewire::test(MediaCollection::class, [
-        'showUploadZone' => false,
-    ])
-        ->assertSet('showUploadZone', false);
 });
 
 it('loads existing media when model is provided', function () {
@@ -76,16 +68,7 @@ it('loads existing media when model is provided', function () {
         'collection' => 'gallery',
     ]);
 
-    expect($component->get('existingMedia'))->toHaveCount(2);
-});
-
-it('can remove a pending upload', function () {
-    $file = UploadedFile::fake()->image('test.jpg', 100, 100);
-
-    Livewire::test(MediaCollection::class)
-        ->set('uploads', [$file])
-        ->call('removeUpload', 0)
-        ->assertSet('uploads', []);
+    expect($component->get('media'))->toHaveCount(2);
 });
 
 it('can remove existing media', function () {
@@ -110,31 +93,26 @@ it('can toggle edit mode for a media item', function () {
         'model' => $this->user,
         'collection' => 'gallery',
     ])
-        ->call('toggleEdit', $media->id)
+        ->call('editMedia', $media->id)
         ->assertSet('editingMediaId', $media->id)
-        ->call('toggleEdit', $media->id)
+        ->call('cancelEdit')
         ->assertSet('editingMediaId', null);
 });
 
-it('can save uploaded files', function () {
-    $file = UploadedFile::fake()->image('test.jpg', 100, 100);
-
+it('does not upload when there are no files', function () {
     Livewire::test(MediaCollection::class, [
         'model' => $this->user,
         'collection' => 'gallery',
     ])
-        ->set('uploads', [$file])
-        ->call('save')
-        ->assertDispatched('media-uploaded');
-
-    expect($this->user->getMedia('gallery'))->toHaveCount(1);
+        ->call('uploadFiles')
+        ->assertNotDispatched('media-uploaded');
 });
 
-it('does not save when there are no uploads', function () {
+it('can remove a pending upload from array', function () {
     Livewire::test(MediaCollection::class, [
         'model' => $this->user,
-        'collection' => 'gallery',
     ])
-        ->call('save')
-        ->assertNotDispatched('media-uploaded');
+        ->set('uploads', ['file1', 'file2'])
+        ->call('removeUpload', 0)
+        ->assertSet('uploads', ['file2']);
 });

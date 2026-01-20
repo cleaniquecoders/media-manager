@@ -5,7 +5,16 @@
       "WebFetch(domain:livewire.laravel.com)",
       "Bash(composer format:*)",
       "Bash(composer analyse:*)",
-      "Bash(composer test:*)"
+      "Bash(composer test:*)",
+      "Bash(composer dump-autoload:*)",
+      "Bash(vendor/bin/testbench workbench:install:*)",
+      "Bash(vendor/bin/testbench workbench:build:*)",
+      "Bash(vendor/bin/testbench env:*)",
+      "Bash(vendor/bin/testbench db:seed:*)",
+      "Bash(vendor/bin/pest:*)",
+      "Bash(./vendor/bin/testbench migrate:*)",
+      "Bash(./vendor/bin/testbench db:seed:*)",
+      "Bash(pkill:*)"
     ]
   }
 }

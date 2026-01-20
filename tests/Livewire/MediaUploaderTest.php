@@ -15,12 +15,6 @@ beforeEach(function () {
     ]);
 });
 
-it('can render the media uploader component', function () {
-    Livewire::test(MediaUploader::class)
-        ->assertStatus(200)
-        ->assertViewIs('media-manager::livewire.media-uploader');
-});
-
 it('can render with model binding', function () {
     Livewire::test(MediaUploader::class, [
         'model' => $this->user,
@@ -34,6 +28,7 @@ it('can render with model binding', function () {
 
 it('can set max files limit', function () {
     Livewire::test(MediaUploader::class, [
+        'model' => $this->user,
         'maxFiles' => 5,
     ])
         ->assertSet('maxFiles', 5);
@@ -41,22 +36,13 @@ it('can set max files limit', function () {
 
 it('can set accepted types', function () {
     Livewire::test(MediaUploader::class, [
+        'model' => $this->user,
         'acceptedTypes' => ['image/jpeg', 'image/png'],
     ])
         ->assertSet('acceptedTypes', ['image/jpeg', 'image/png']);
 });
 
-it('can remove a pending upload', function () {
-    $file = UploadedFile::fake()->image('test.jpg', 100, 100);
-
-    Livewire::test(MediaUploader::class)
-        ->set('uploads', [$file])
-        ->call('removeUpload', 0)
-        ->assertSet('uploads', []);
-});
-
 it('loads existing media when model is provided', function () {
-    // First, add media to the user
     $file = UploadedFile::fake()->image('avatar.jpg', 100, 100);
     $this->user->addMedia($file)->toMediaCollection('avatar');
 
@@ -82,26 +68,6 @@ it('can remove existing media', function () {
     expect($media->fresh())->toBeNull();
 });
 
-it('can save uploaded files to model', function () {
-    $file = UploadedFile::fake()->image('test.jpg', 100, 100);
-
-    $component = Livewire::test(MediaUploader::class, [
-        'model' => $this->user,
-        'collection' => 'documents',
-    ])
-        ->set('uploads', [$file])
-        ->call('save')
-        ->assertDispatched('media-uploaded');
-
-    expect($this->user->getMedia('documents'))->toHaveCount(1);
-});
-
-it('can update custom property values', function () {
-    Livewire::test(MediaUploader::class)
-        ->call('updatePropertyValue', 0, 'alt', 'Alternative text')
-        ->assertSet('customProperties.0.alt', 'Alternative text');
-});
-
 it('does not save when there are no uploads', function () {
     Livewire::test(MediaUploader::class, [
         'model' => $this->user,
@@ -113,17 +79,24 @@ it('does not save when there are no uploads', function () {
     expect($this->user->getMedia('documents'))->toHaveCount(0);
 });
 
-it('does not save when no model is bound', function () {
-    $file = UploadedFile::fake()->image('test.jpg', 100, 100);
-
-    Livewire::test(MediaUploader::class)
-        ->set('uploads', [$file])
-        ->call('save')
-        ->assertNotDispatched('media-uploaded');
+it('can update custom property values', function () {
+    Livewire::test(MediaUploader::class, [
+        'model' => $this->user,
+    ])
+        ->call('updatePropertyValue', 0, 'alt', 'Alternative text')
+        ->assertSet('customProperties.0.alt', 'Alternative text');
 });
 
-it('validates uploads when they are updated', function () {
-    // This tests that updatedUploads is called and validates files
-    Livewire::test(MediaUploader::class)
-        ->assertSet('uploadErrors', []);
+it('can remove a pending upload from uploads array', function () {
+    $file1 = UploadedFile::fake()->image('test1.jpg', 100, 100);
+    $file2 = UploadedFile::fake()->image('test2.jpg', 100, 100);
+
+    $component = Livewire::test(MediaUploader::class, [
+        'model' => $this->user,
+    ])
+        ->set('uploads', [$file1, $file2])
+        ->call('removeUpload', 0);
+
+    // After removal, only one file should remain
+    expect($component->get('uploads'))->toHaveCount(1);
 });

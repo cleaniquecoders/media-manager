@@ -30,3 +30,4 @@ phpstan.neon
 testbench.yaml
 todo.md
 /coverage
+/@dev
