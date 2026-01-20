@@ -95,6 +95,9 @@ class Post extends Model implements HasMedia
 ### 2. Add components to your views
 
 ```blade
+{{-- Media Browser - embed in your own view with your layout --}}
+<livewire:media-manager::browser />
+
 {{-- Media Uploader --}}
 <livewire:media-manager::uploader
     :model="$post"
@@ -116,9 +119,23 @@ class Post extends Model implements HasMedia
 />
 ```
 
-### 3. Access the media browser
+### 3. Create a route for the media browser
 
-Visit `/media-manager` to browse all media in your application.
+Create your own route and view to display the browser:
+
+```php
+// routes/web.php
+Route::get('/media', function () {
+    return view('media');
+})->middleware(['web', 'auth']);
+```
+
+```blade
+{{-- resources/views/media.blade.php --}}
+<x-app-layout>
+    <livewire:media-manager::browser />
+</x-app-layout>
+```
 
 ## Using the Facade
 

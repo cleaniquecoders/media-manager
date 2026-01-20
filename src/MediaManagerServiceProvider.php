@@ -3,14 +3,12 @@
 namespace CleaniqueCoders\MediaManager;
 
 use CleaniqueCoders\MediaManager\Commands\MediaManagerCommand;
-use CleaniqueCoders\MediaManager\Http\Middleware\AuthorizeMediaManager;
 use CleaniqueCoders\MediaManager\Livewire\Browser;
 use CleaniqueCoders\MediaManager\Livewire\Collection;
 use CleaniqueCoders\MediaManager\Livewire\Picker;
 use CleaniqueCoders\MediaManager\Livewire\Uploader;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use CleaniqueCoders\MediaManager\Support\MediaFilter;
-use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -34,7 +32,6 @@ class MediaManagerServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->registerLivewireComponents();
-        $this->registerRoutes();
         $this->registerPublishables();
     }
 
@@ -64,10 +61,10 @@ class MediaManagerServiceProvider extends PackageServiceProvider
 
     protected function registerLivewireComponents(): void
     {
-        // Livewire 4 uses addNamespace on the facade
-        // Livewire 3 requires explicit component registration
-        if (method_exists(Livewire::getFacadeRoot(), 'addNamespace')) {
-            Livewire::addNamespace('media-manager', 'CleaniqueCoders\\MediaManager\\Livewire');
+        $version = config('media-manager.livewire', 'v4');
+
+        if ($this->shouldUseLivewire4($version)) {
+            Livewire::addNamespace('media-manager', classNamespace: 'CleaniqueCoders\MediaManager\Livewire');
         } else {
             Livewire::component('media-manager::browser', Browser::class);
             Livewire::component('media-manager::uploader', Uploader::class);
@@ -76,19 +73,12 @@ class MediaManagerServiceProvider extends PackageServiceProvider
         }
     }
 
-    protected function registerRoutes(): void
+    protected function shouldUseLivewire4(string $version): bool
     {
-        if (! config('media-manager.routes.enabled', true)) {
-            return;
-        }
-
-        Route::middleware(array_merge(
-            config('media-manager.routes.middleware', ['web', 'auth']),
-            [AuthorizeMediaManager::class]
-        ))
-            ->prefix(config('media-manager.routes.prefix', 'media-manager'))
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-            });
+        return match ($version) {
+            'v4' => true,
+            'v3' => false,
+            default => method_exists(Livewire::getFacadeRoot(), 'addNamespace'),
+        };
     }
 }

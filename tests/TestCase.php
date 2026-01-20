@@ -46,6 +46,9 @@ class TestCase extends Orchestra
         // Media library config
         config()->set('media-library.disk_name', 'public');
 
+        // Cache config - use array driver for tests (required for Livewire 4)
+        config()->set('cache.default', 'array');
+
         // View config - ensure we have a proper cache path
         config()->set('view.compiled', storage_path('framework/views'));
 

@@ -6,7 +6,7 @@ use Workbench\App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/demo', function () {
     $user = User::first();
@@ -38,3 +38,5 @@ Route::get('/model-demo', function () {
 
     return view('model-demo', compact('user', 'post'));
 })->name('model-demo');
+
+Route::view('/browser', 'browser-demo')->name('browser');

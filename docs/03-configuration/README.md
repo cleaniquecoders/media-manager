@@ -8,10 +8,6 @@ This section covers all configuration options for Media Manager.
 
 Complete reference for all configuration options in `config/media-manager.php`.
 
-### [2. Authorization](02-authorization.md)
-
-Setting up access control and authorization gates.
-
 ## Quick Configuration
 
 Publish the configuration file:

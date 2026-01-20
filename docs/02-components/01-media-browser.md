@@ -6,16 +6,22 @@ The Media Browser component provides a full-featured interface for browsing, fil
 
 ## Basic Usage
 
-Add the media browser to any Blade view:
+Add the media browser to any Blade view with your own layout:
 
 ```blade
-<livewire:media-manager::browser />
+{{-- resources/views/media.blade.php --}}
+<x-app-layout>
+    <livewire:media-manager::browser />
+</x-app-layout>
 ```
 
-Or visit the dedicated route:
+Create a route to access the browser:
 
-```text
-/media-manager
+```php
+// routes/web.php
+Route::get('/media', function () {
+    return view('media');
+})->middleware(['web', 'auth']);
 ```
 
 ## Features

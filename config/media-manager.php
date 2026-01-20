@@ -4,17 +4,15 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Route Configuration
+    | Livewire Version
     |--------------------------------------------------------------------------
     |
-    | Configure the routes for the media manager browser interface.
+    | Specify which Livewire version registration method to use.
+    | - 'v4': Use Livewire 4 addNamespace() method (default)
+    | - 'v3': Use Livewire 3 explicit component() registration
     |
     */
-    'routes' => [
-        'enabled' => true,
-        'prefix' => 'media-manager',
-        'middleware' => ['web', 'auth'],
-    ],
+    'livewire' => 'v4',
 
     /*
     |--------------------------------------------------------------------------
@@ -40,7 +38,6 @@ return [
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ],
-        'chunk_size' => 1024 * 1024, // 1MB chunks
     ],
 
     /*
@@ -55,19 +52,6 @@ return [
         'default_view' => 'grid', // grid|list
         'items_per_page' => 24,
         'columns' => 4, // grid columns
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Authorization
-    |--------------------------------------------------------------------------
-    |
-    | Configure authorization for the media manager.
-    | Set 'gate' to null to allow all authenticated users.
-    |
-    */
-    'authorization' => [
-        'gate' => null, // e.g., 'manage-media'
     ],
 
     /*

@@ -2,15 +2,25 @@
 
 Get Media Manager running in your application in minutes.
 
-## Step 1: Access the Media Browser
+## Step 1: Add the Media Browser to Your App
 
-After installation, visit the media browser at:
+Create a route and view to display the media browser:
 
-```text
-/media-manager
+```php
+// routes/web.php
+Route::get('/media', function () {
+    return view('media');
+})->middleware(['web', 'auth']);
 ```
 
-This displays the full-featured media browser interface where you can:
+```blade
+{{-- resources/views/media.blade.php --}}
+<x-app-layout>
+    <livewire:media-manager::browser />
+</x-app-layout>
+```
+
+The media browser provides a full-featured interface where you can:
 
 - View all uploaded media in grid or list view
 - Filter by collection, type, or date

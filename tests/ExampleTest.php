@@ -23,8 +23,7 @@ it('can resolve media filter from container', function () {
 });
 
 it('has correct default configuration', function () {
-    expect(config('media-manager.routes.enabled'))->toBeTrue();
-    expect(config('media-manager.routes.prefix'))->toBe('media-manager');
+    expect(config('media-manager.livewire'))->toBe('v4');
     expect(config('media-manager.browser.default_view'))->toBe('grid');
     expect(config('media-manager.browser.items_per_page'))->toBe(24);
 });

@@ -15,11 +15,7 @@ php artisan vendor:publish --tag="media-manager-config"
 
 // config/media-manager.php
 return [
-    'routes' => [
-        'enabled' => true,
-        'prefix' => 'media-manager',
-        'middleware' => ['web', 'auth'],
-    ],
+    'livewire' => 'v4',
 
     'upload' => [
         'max_file_size' => 10 * 1024 * 1024, // 10MB
@@ -37,7 +33,6 @@ return [
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ],
-        'chunk_size' => 1024 * 1024, // 1MB chunks
     ],
 
     'browser' => [
@@ -46,54 +41,35 @@ return [
         'columns' => 4,
     ],
 
-    'authorization' => [
-        'gate' => null,
-    ],
-
     'temporary_disk' => 'local',
     'temporary_upload_expiration' => 24,
 ];
 ```
 
-## Route Configuration
+## Livewire Configuration
 
-Control the media browser route behavior.
+Configure which Livewire version registration method to use.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `enabled` | bool | `true` | Enable/disable the browser route |
-| `prefix` | string | `'media-manager'` | URL prefix for the route |
-| `middleware` | array | `['web', 'auth']` | Middleware to apply |
+| `livewire` | string | `'v4'` | Livewire version (`v4` or `v3`) |
 
 ### Examples
 
-**Change the URL prefix:**
+**Use Livewire 4 (default):**
 
 ```php
-'routes' => [
-    'enabled' => true,
-    'prefix' => 'admin/media',
-    'middleware' => ['web', 'auth'],
-],
+'livewire' => 'v4',
 ```
 
-**Add admin middleware:**
+**Use Livewire 3:**
 
 ```php
-'routes' => [
-    'enabled' => true,
-    'prefix' => 'media-manager',
-    'middleware' => ['web', 'auth', 'admin'],
-],
+'livewire' => 'v3',
 ```
 
-**Disable the route entirely:**
-
-```php
-'routes' => [
-    'enabled' => false,
-],
-```
+> **Note**: Livewire 4 uses `addNamespace()` for component registration.
+> Livewire 3 uses explicit `component()` registration.
 
 ## Upload Configuration
 
@@ -103,7 +79,6 @@ Control file upload behavior and restrictions.
 |--------|------|---------|-------------|
 | `max_file_size` | int | `10485760` (10MB) | Maximum file size in bytes |
 | `allowed_mimes` | array | See below | Allowed MIME types |
-| `chunk_size` | int | `1048576` (1MB) | Chunk size for uploads |
 
 ### Default Allowed MIME Types
 
@@ -188,18 +163,6 @@ Customize the media browser interface.
 ],
 ```
 
-## Authorization Configuration
-
-Control access to the media manager.
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `gate` | string\|null | `null` | Gate name for authorization |
-
-When `gate` is `null`, all authenticated users can access the media manager.
-
-See [Authorization](02-authorization.md) for detailed setup.
-
 ## Temporary Upload Configuration
 
 Configure temporary file handling.
@@ -223,21 +186,14 @@ Configure temporary file handling.
 You can use environment variables for sensitive or environment-specific settings:
 
 ```php
-'routes' => [
-    'enabled' => env('MEDIA_MANAGER_ROUTES_ENABLED', true),
-    'prefix' => env('MEDIA_MANAGER_PREFIX', 'media-manager'),
-],
+'livewire' => env('MEDIA_MANAGER_LIVEWIRE_VERSION', 'v4'),
 
 'upload' => [
     'max_file_size' => env('MEDIA_MANAGER_MAX_FILE_SIZE', 10 * 1024 * 1024),
-],
-
-'authorization' => [
-    'gate' => env('MEDIA_MANAGER_GATE'),
 ],
 ```
 
 ## Related Documentation
 
-- [Authorization](02-authorization.md) - Access control setup
 - [Installation](../01-getting-started/01-installation.md) - Initial setup
+- [Components](../02-components/README.md) - Livewire components

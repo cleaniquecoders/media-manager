@@ -30,7 +30,7 @@
                     <p class="text-sm text-gray-600 mt-2">Upload to User and Post models</p>
                 </a>
 
-                <a href="/media-manager" class="block p-6 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
+                <a href="/browser" class="block p-6 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
                     <h3 class="text-lg font-semibold text-indigo-700">Media Browser</h3>
                     <p class="text-sm text-gray-600 mt-2">Full media library browser</p>
                 </a>
