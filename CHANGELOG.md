@@ -2,6 +2,24 @@
 
 All notable changes to `media-manager` will be documented in this file.
 
+## 1.2.0 - 2026-03-30
+
+### What's Changed
+
+#### Added
+
+- Laravel 13 support (`illuminate/contracts: ^13.0`)
+- PHPUnit 12 compatibility
+- Pest 4 support
+
+#### Changed
+
+- Updated `phpunit.xml.dist` — removed deprecated PHPUnit 10 attributes
+- Updated CI workflow for Laravel 12 matrix
+- Updated dev dependencies (larastan ^3.0, phpstan plugins ^2.0)
+
+**Full Changelog**: https://github.com/cleaniquecoders/media-manager/compare/1.1.0...1.2.0
+
 ## Fix Livewire 3 & 4 Usage - 2026-01-20
 
 ### Release Notes - v1.1.0
@@ -19,6 +37,7 @@ This release introduces Livewire 4 support and restructures the package to follo
 
 ```php
 'livewire' => 'v4', // or 'v3' for Livewire 3
+
 
 ```
 ###### Component-First Architecture
@@ -39,12 +58,14 @@ Route::get('/media', function () {
     return view('media');
 })->middleware(['web', 'auth']);
 
+
 ```
 ```blade
 {{-- resources/views/media.blade.php --}}
 <x-app-layout>
     <livewire:media-manager::browser />
 </x-app-layout>
+
 
 ```
 ###### Component Class Renamed
@@ -65,6 +86,7 @@ Internal Livewire component classes have been renamed for Livewire 4 compatibili
 <livewire:media-manager::uploader />
 <livewire:media-manager::collection />
 <livewire:media-manager::picker />
+
 
 ```
 ###### Configuration Changes
@@ -117,6 +139,7 @@ return [
     'temporary_upload_expiration' => 24,
 ];
 
+
 ```
 ##### Migration Guide
 
@@ -127,6 +150,7 @@ return [
 ```bash
 php artisan vendor:publish --tag="media-manager-config" --force
 
+
 ```
 2. Create your own route for the browser:
 
@@ -135,6 +159,7 @@ php artisan vendor:publish --tag="media-manager-config" --force
 Route::get('/media', function () {
     return view('media');
 })->middleware(['web', 'auth']);
+
 
 ```
 3. Create the view with your layout:
@@ -145,11 +170,13 @@ Route::get('/media', function () {
     <livewire:media-manager::browser />
 </x-app-layout>
 
+
 ```
 4. If using Livewire 3, update your config:
 
 ```php
 'livewire' => 'v3',
+
 
 ```
 ##### Requirements
@@ -205,6 +232,7 @@ Component usage remains the same across both Livewire versions:
 <livewire:media-manager::picker />                                                                                          
 
 
+
   ```
 ##### Breaking Changes
 
@@ -216,6 +244,7 @@ No action required. Simply update to v1.0.1:
 
 ```bash
   composer update cleaniquecoders/media-manager                                                                               
+
 
 
 ```
@@ -236,7 +265,6 @@ We're excited to announce the first stable release of **Media Manager** - a Lara
 - **Media Service** - Programmatic media management API
 - **Authorization** - Configurable access control for media operations
 ##### Requirements
-
 - PHP 8.2+
 - Laravel 11.x / 12.x
 - Livewire 3.x & 4.x
@@ -245,6 +273,7 @@ We're excited to announce the first stable release of **Media Manager** - a Lara
 
 ```bash
   composer require cleaniquecoders/media-manager                                                                
+
 
 
 
