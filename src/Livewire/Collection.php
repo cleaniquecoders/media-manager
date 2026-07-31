@@ -4,6 +4,7 @@ namespace CleaniqueCoders\MediaManager\Livewire;
 
 use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
 use CleaniqueCoders\MediaManager\Concerns\HandlesUpload;
+use CleaniqueCoders\MediaManager\MediaManager;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
@@ -147,7 +148,8 @@ class Collection extends Component
 
     public function removeMedia(int $mediaId): void
     {
-        $media = Media::find($mediaId);
+        $mediaModel = MediaManager::mediaModel();
+        $media = $mediaModel::find($mediaId);
         if ($media && $this->canManageMedia($media)) {
             $media->delete();
             $this->media = array_values(array_filter(
@@ -186,7 +188,8 @@ class Collection extends Component
             return;
         }
 
-        $media = Media::find($this->editingMediaId);
+        $mediaModel = MediaManager::mediaModel();
+        $media = $mediaModel::find($this->editingMediaId);
         if (! $media || ! $this->canManageMedia($media)) {
             return;
         }
@@ -230,7 +233,8 @@ class Collection extends Component
             return;
         }
 
-        Media::setNewOrder($orderedIds);
+        $mediaModel = MediaManager::mediaModel();
+        $mediaModel::setNewOrder($orderedIds);
 
         // Reorder local array
         $this->media = collect($this->media)

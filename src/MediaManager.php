@@ -20,6 +20,18 @@ class MediaManager
     }
 
     /**
+     * The media model the host app configured — spatie's own, unless
+     * media-library.media_model points at a subclass (a different
+     * connection, added scopes, and so on).
+     *
+     * @return class-string<Media>
+     */
+    public static function mediaModel(): string
+    {
+        return config('media-library.media_model', Media::class);
+    }
+
+    /**
      * Get all media with optional filtering and pagination.
      */
     public function browse(array $filters = [], ?int $perPage = null): LengthAwarePaginator

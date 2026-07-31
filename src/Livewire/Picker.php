@@ -3,6 +3,7 @@
 namespace CleaniqueCoders\MediaManager\Livewire;
 
 use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
+use CleaniqueCoders\MediaManager\MediaManager;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
@@ -10,7 +11,6 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Modelable;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Picker extends Component
 {
@@ -113,7 +113,9 @@ class Picker extends Component
             return [];
         }
 
-        return Media::whereIn('id', $this->selectedIds)
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::whereIn('id', $this->selectedIds)
             ->get()
             ->map(fn ($m) => $this->getPreviewData($m))
             ->toArray();

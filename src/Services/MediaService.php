@@ -2,6 +2,7 @@
 
 namespace CleaniqueCoders\MediaManager\Services;
 
+use CleaniqueCoders\MediaManager\MediaManager;
 use CleaniqueCoders\MediaManager\Support\MediaFilter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,8 @@ class MediaService
      */
     public function getMedia(array $filters = [], int $perPage = 24): LengthAwarePaginator
     {
-        $query = Media::query()->latest();
+        $mediaModel = MediaManager::mediaModel();
+        $query = $mediaModel::query()->latest();
 
         return $this->filter->apply($query, $filters)->paginate($perPage);
     }
@@ -47,7 +49,9 @@ class MediaService
      */
     public function getCollections(): Collection
     {
-        return Media::query()
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::query()
             ->select('collection_name')
             ->distinct()
             ->pluck('collection_name');
@@ -58,7 +62,9 @@ class MediaService
      */
     public function getMimeTypes(): Collection
     {
-        return Media::query()
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::query()
             ->select('mime_type')
             ->distinct()
             ->pluck('mime_type');
@@ -200,7 +206,9 @@ class MediaService
      */
     public function deleteMultiple(array $mediaIds): int
     {
-        return Media::whereIn('id', $mediaIds)->get()->each->delete()->count();
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::whereIn('id', $mediaIds)->get()->each->delete()->count();
     }
 
     /**
@@ -210,7 +218,8 @@ class MediaService
      */
     public function reorder(Model $model, string $collection, array $order): void
     {
-        Media::setNewOrder($order);
+        $mediaModel = MediaManager::mediaModel();
+        $mediaModel::setNewOrder($order);
     }
 
     /**
@@ -218,7 +227,9 @@ class MediaService
      */
     public function find(int $id): ?Media
     {
-        return Media::find($id);
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::find($id);
     }
 
     /**
@@ -226,7 +237,9 @@ class MediaService
      */
     public function findMany(array $ids): Collection
     {
-        return Media::whereIn('id', $ids)->get();
+        $mediaModel = MediaManager::mediaModel();
+
+        return $mediaModel::whereIn('id', $ids)->get();
     }
 
     /**

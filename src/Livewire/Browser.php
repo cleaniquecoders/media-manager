@@ -3,6 +3,7 @@
 namespace CleaniqueCoders\MediaManager\Livewire;
 
 use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
+use CleaniqueCoders\MediaManager\MediaManager;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
@@ -10,7 +11,6 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Browser extends Component
 {
@@ -127,7 +127,8 @@ class Browser extends Component
 
     public function deleteSingle(int $mediaId): void
     {
-        $media = Media::find($mediaId);
+        $mediaModel = MediaManager::mediaModel();
+        $media = $mediaModel::find($mediaId);
         if ($media) {
             $media->delete();
             $this->closePreview();
@@ -174,7 +175,8 @@ class Browser extends Component
             return null;
         }
 
-        $media = Media::find($this->previewMediaId);
+        $mediaModel = MediaManager::mediaModel();
+        $media = $mediaModel::find($this->previewMediaId);
 
         return $media ? $this->getPreviewData($media) : null;
     }

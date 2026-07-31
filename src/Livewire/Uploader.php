@@ -4,6 +4,7 @@ namespace CleaniqueCoders\MediaManager\Livewire;
 
 use CleaniqueCoders\MediaManager\Concerns\HandlesPreview;
 use CleaniqueCoders\MediaManager\Concerns\HandlesUpload;
+use CleaniqueCoders\MediaManager\MediaManager;
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
@@ -99,7 +100,8 @@ class Uploader extends Component
 
     public function removeExisting(int $mediaId): void
     {
-        $media = Media::find($mediaId);
+        $mediaModel = MediaManager::mediaModel();
+        $media = $mediaModel::find($mediaId);
         if ($media && $this->canManageMedia($media)) {
             $media->delete();
             $this->existingMedia = array_filter(
