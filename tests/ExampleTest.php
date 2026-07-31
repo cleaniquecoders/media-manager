@@ -29,7 +29,7 @@ it('has correct default configuration', function () {
 });
 
 it('facade resolves correctly', function () {
-    $manager = \CleaniqueCoders\MediaManager\Facades\MediaManager::getFacadeRoot();
+    $manager = CleaniqueCoders\MediaManager\Facades\MediaManager::getFacadeRoot();
 
     expect($manager)->toBeInstanceOf(MediaManager::class);
 });

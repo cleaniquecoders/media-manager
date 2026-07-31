@@ -5,6 +5,7 @@ use CleaniqueCoders\MediaManager\Support\MediaFilter;
 use CleaniqueCoders\MediaManager\Tests\Fixtures\TestPost;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 beforeEach(function () {
     Storage::fake('public');
@@ -69,7 +70,7 @@ it('can delete media', function () {
 
     $this->service->delete($media);
 
-    expect(\Spatie\MediaLibrary\MediaCollections\Models\Media::find($mediaId))->toBeNull();
+    expect(Media::find($mediaId))->toBeNull();
 });
 
 it('can delete multiple media items', function () {
