@@ -2,6 +2,16 @@
 
 All notable changes to `media-manager` will be documented in this file.
 
+## 1.2.2 - 2026-10-24
+
+### Fixed
+
+- Media sorting uses native HTML5 drag-and-drop instead of loading SortableJS from cdn.jsdelivr.net, which host apps with a `'self'` Content-Security-Policy blocked in production.
+
+Apps that published `media-manager-views` should re-publish `livewire/media-collection.blade.php`.
+
+**Full Changelog**: https://github.com/cleaniquecoders/media-manager/compare/1.2.1...1.2.2
+
 ## 1.2.1 - 2026-07-31
 
 ### What's Changed
@@ -48,6 +58,7 @@ This release introduces Livewire 4 support and restructures the package to follo
 
 
 
+
 ```
 ###### Component-First Architecture
 
@@ -69,12 +80,14 @@ Route::get('/media', function () {
 
 
 
+
 ```
 ```blade
 {{-- resources/views/media.blade.php --}}
 <x-app-layout>
     <livewire:media-manager::browser />
 </x-app-layout>
+
 
 
 
@@ -97,6 +110,7 @@ Internal Livewire component classes have been renamed for Livewire 4 compatibili
 <livewire:media-manager::uploader />
 <livewire:media-manager::collection />
 <livewire:media-manager::picker />
+
 
 
 
@@ -153,6 +167,7 @@ return [
 
 
 
+
 ```
 ##### Migration Guide
 
@@ -162,6 +177,7 @@ return [
 
 ```bash
 php artisan vendor:publish --tag="media-manager-config" --force
+
 
 
 
@@ -176,6 +192,7 @@ Route::get('/media', function () {
 
 
 
+
 ```
 3. Create the view with your layout:
 
@@ -187,11 +204,13 @@ Route::get('/media', function () {
 
 
 
+
 ```
 4. If using Livewire 3, update your config:
 
 ```php
 'livewire' => 'v3',
+
 
 
 
@@ -251,6 +270,7 @@ Component usage remains the same across both Livewire versions:
 
 
 
+
   ```
 ##### Breaking Changes
 
@@ -262,6 +282,7 @@ No action required. Simply update to v1.0.1:
 
 ```bash
   composer update cleaniquecoders/media-manager                                                                               
+
 
 
 
@@ -288,9 +309,9 @@ We're excited to announce the first stable release of **Media Manager** - a Lara
 - Laravel 11.x / 12.x
 - Livewire 3.x & 4.x
 ##### Installation
-
 ```bash
   composer require cleaniquecoders/media-manager                                                                
+
 
 
 
