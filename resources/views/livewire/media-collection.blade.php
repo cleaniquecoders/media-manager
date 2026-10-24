@@ -97,19 +97,30 @@
     @if(count($media) > 0)
         <div
             @if($sortable)
+                {{-- Native drag-and-drop: no third-party script, so nothing for a host app's CSP to block. --}}
                 x-data="{
-                    items: @js(collect($media)->pluck('id')->toArray()),
-                    init() {
-                        new Sortable(this.$el, {
-                            animation: 150,
-                            ghostClass: 'opacity-50',
-                            onEnd: (evt) => {
-                                const ids = Array.from(this.$el.children).map(el => parseInt(el.dataset.id));
-                                $wire.updateOrder(ids);
-                            }
-                        });
+                    dragging: null,
+                    start(e) {
+                        this.dragging = e.target.closest('[data-id]');
+                        this.dragging?.classList.add('opacity-50');
+                    },
+                    over(e) {
+                        const target = e.target.closest('[data-id]');
+                        if (! this.dragging || ! target || target === this.dragging) return;
+                        const box = target.getBoundingClientRect();
+                        const after = (e.clientX - box.left) > box.width / 2;
+                        target.parentNode.insertBefore(this.dragging, after ? target.nextSibling : target);
+                    },
+                    end() {
+                        if (! this.dragging) return;
+                        this.dragging.classList.remove('opacity-50');
+                        this.dragging = null;
+                        $wire.updateOrder(Array.from(this.$el.children).map(el => parseInt(el.dataset.id)));
                     }
                 }"
+                x-on:dragstart="start($event)"
+                x-on:dragover.prevent="over($event)"
+                x-on:dragend="end()"
             @endif
             class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
         >
@@ -117,6 +128,7 @@
                 <div
                     wire:key="media-{{ $item['id'] }}"
                     data-id="{{ $item['id'] }}"
+                    @if($sortable) draggable="true" @endif
                     class="group relative bg-white rounded-lg border border-gray-200 overflow-hidden {{ $sortable ? 'cursor-move' : '' }}"
                 >
                     {{-- Thumbnail --}}
@@ -219,8 +231,3 @@
     @endif
 </div>
 
-@if($sortable)
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    @endpush
-@endif

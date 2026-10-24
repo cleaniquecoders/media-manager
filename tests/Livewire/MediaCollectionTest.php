@@ -116,3 +116,17 @@ it('can remove a pending upload from array', function () {
         ->call('removeUpload', 0)
         ->assertSet('uploads', ['file2']);
 });
+
+it('sorts with native drag and drop and loads no third-party script', function () {
+    $this->user->addMedia(UploadedFile::fake()->image('a.jpg'))->toMediaCollection('gallery');
+
+    Livewire::test(Collection::class, [
+        'model' => $this->user,
+        'collection' => 'gallery',
+        'sortable' => true,
+    ])
+        ->assertSeeHtml('draggable="true"')
+        ->assertSeeHtml('x-on:dragend')
+        ->assertDontSeeHtml('cdn.jsdelivr.net')
+        ->assertDontSeeHtml('Sortable');
+});
