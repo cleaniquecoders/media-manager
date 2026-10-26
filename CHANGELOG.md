@@ -2,6 +2,14 @@
 
 All notable changes to `media-manager` will be documented in this file.
 
+## 1.2.3 - 2026-10-26
+
+### Fixed
+
+- `attachTemporary()` now works when `media-manager.temporary_disk` is a non-local disk such as S3. It attaches via `FileAdderFactory::createFromDisk()` instead of `Storage::path()`, which is not a real file on remote disks. The temporary file is still removed after attaching.
+
+**Full Changelog**: https://github.com/cleaniquecoders/media-manager/compare/1.2.2...1.2.3
+
 ## 1.2.2 - 2026-10-24
 
 ### Fixed
@@ -59,6 +67,7 @@ This release introduces Livewire 4 support and restructures the package to follo
 
 
 
+
 ```
 ###### Component-First Architecture
 
@@ -81,12 +90,14 @@ Route::get('/media', function () {
 
 
 
+
 ```
 ```blade
 {{-- resources/views/media.blade.php --}}
 <x-app-layout>
     <livewire:media-manager::browser />
 </x-app-layout>
+
 
 
 
@@ -110,6 +121,7 @@ Internal Livewire component classes have been renamed for Livewire 4 compatibili
 <livewire:media-manager::uploader />
 <livewire:media-manager::collection />
 <livewire:media-manager::picker />
+
 
 
 
@@ -168,6 +180,7 @@ return [
 
 
 
+
 ```
 ##### Migration Guide
 
@@ -177,6 +190,7 @@ return [
 
 ```bash
 php artisan vendor:publish --tag="media-manager-config" --force
+
 
 
 
@@ -193,6 +207,7 @@ Route::get('/media', function () {
 
 
 
+
 ```
 3. Create the view with your layout:
 
@@ -205,11 +220,13 @@ Route::get('/media', function () {
 
 
 
+
 ```
 4. If using Livewire 3, update your config:
 
 ```php
 'livewire' => 'v3',
+
 
 
 
@@ -271,6 +288,7 @@ Component usage remains the same across both Livewire versions:
 
 
 
+
   ```
 ##### Breaking Changes
 
@@ -282,6 +300,7 @@ No action required. Simply update to v1.0.1:
 
 ```bash
   composer update cleaniquecoders/media-manager                                                                               
+
 
 
 
@@ -311,13 +330,9 @@ We're excited to announce the first stable release of **Media Manager** - a Lara
 ##### Installation
 ```bash
   composer require cleaniquecoders/media-manager                                                                
-
-
-
-
-
-
 ```
 ##### Documentation
 
 For detailed usage and configuration, please refer to the [docs/](https://github.com/cleaniquecoders/media-manager/tree/main/docs).
+
+```
