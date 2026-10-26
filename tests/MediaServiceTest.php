@@ -3,6 +3,7 @@
 use CleaniqueCoders\MediaManager\Services\MediaService;
 use CleaniqueCoders\MediaManager\Support\MediaFilter;
 use CleaniqueCoders\MediaManager\Tests\Fixtures\TestPost;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -124,4 +125,33 @@ it('can validate file against configuration', function () {
     $largeFile = UploadedFile::fake()->create('large.jpg', 10, 'image/jpeg');
     $errors = $this->service->validateFile($largeFile);
     expect($errors)->not->toBeEmpty();
+});
+
+it('can attach a temporary upload stored on a non-local disk', function () {
+    // Simulate a remote disk (e.g. S3): it has no local path, so path() must not be relied on.
+    $fake = Storage::fake('s3');
+    Storage::set('s3', new class($fake->getDriver(), $fake->getAdapter(), $fake->getConfig()) extends FilesystemAdapter
+    {
+        public function path($path)
+        {
+            throw new RuntimeException('Remote disks have no local path.');
+        }
+    });
+    config()->set('media-manager.temporary_disk', 's3');
+
+    $post = TestPost::create(['title' => 'Test Post']);
+    $temporary = $this->service->storeTemporary(UploadedFile::fake()->image('photo.jpg', 100, 100));
+
+    expect($temporary['disk'])->toBe('s3');
+    Storage::disk('s3')->assertExists($temporary['path']);
+
+    $media = $this->service->attachTemporary($post, $temporary, 'gallery', ['alt' => 'A photo']);
+
+    expect($media->collection_name)->toBe('gallery');
+    expect($media->name)->toBe('photo');
+    expect($media->file_name)->toBe('photo.jpg');
+    expect($media->getCustomProperty('alt'))->toBe('A photo');
+    expect($post->getMedia('gallery'))->toHaveCount(1);
+    Storage::disk('public')->assertExists($media->getPathRelativeToRoot());
+    Storage::disk('s3')->assertMissing($temporary['path']);
 });

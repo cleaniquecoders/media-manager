@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\FileAdderFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MediaService
@@ -131,10 +132,9 @@ class MediaService
      */
     public function attachTemporary(Model $model, array $temporaryFile, string $collection = 'default', array $customProperties = []): Media
     {
-        $disk = $temporaryFile['disk'];
-        $path = Storage::disk($disk)->path($temporaryFile['path']);
-
-        $media = $model->addMedia($path)
+        // Same as $model->addMediaFromDisk() (not on the HasMedia contract): streams from any disk
+        // (local, S3, ...) and removes the source after attaching.
+        $media = FileAdderFactory::createFromDisk($model, $temporaryFile['path'], $temporaryFile['disk'])
             ->usingName(pathinfo($temporaryFile['original_name'], PATHINFO_FILENAME))
             ->usingFileName($temporaryFile['original_name'])
             ->withCustomProperties($customProperties)
