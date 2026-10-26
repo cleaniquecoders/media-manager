@@ -3,6 +3,7 @@
 namespace CleaniqueCoders\MediaManager;
 
 use CleaniqueCoders\MediaManager\Commands\MediaManagerCommand;
+use CleaniqueCoders\MediaManager\Commands\MoveDiskCommand;
 use CleaniqueCoders\MediaManager\Livewire\Browser;
 use CleaniqueCoders\MediaManager\Livewire\Collection;
 use CleaniqueCoders\MediaManager\Livewire\Picker;
@@ -26,7 +27,8 @@ class MediaManagerServiceProvider extends PackageServiceProvider
             ->name('media-manager')
             ->hasConfigFile()
             ->hasViews()
-            ->hasCommand(MediaManagerCommand::class);
+            ->hasCommand(MediaManagerCommand::class)
+            ->hasCommand(MoveDiskCommand::class);
     }
 
     public function packageBooted(): void

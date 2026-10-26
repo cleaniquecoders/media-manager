@@ -154,6 +154,78 @@ MediaManager::delete($media);
 MediaManager::deleteMultiple([1, 2, 3]);
 ```
 
+## Moving Media Between Disks or Path Layouts
+
+`media-manager:move-disk` copies Media Library files (originals, conversions and responsive
+images) to another disk and/or another path layout, verifies every copy, and only then updates
+the `disk` / `conversions_disk` columns of the media row (quietly: no model events, no
+`updated_at` bump). Files are streamed, so it works with disks that have no local path, such as S3.
+
+```bash
+php artisan media-manager:move-disk --from=<disk> --to=<disk>
+    [--from-path-generator=<class>] [--to-path-generator=<class>]
+    [--collection=<name>] [--chunk=100] [--dry-run] [--delete-source] [--force]
+```
+
+| Option | Meaning |
+|---|---|
+| `--from` / `--to` | Source and destination disk (required). They may be equal for a re-layout. |
+| `--from-path-generator` / `--to-path-generator` | A class implementing Spatie's `PathGenerator`. Each one defaults to the configured generator, including `custom_path_generators`. |
+| `--collection` | Only move media of this collection. |
+| `--chunk` | Rows per chunk (default 100). |
+| `--dry-run` | Print what would move and change nothing. |
+| `--delete-source` | Delete the moved source files, plus any of their directories left completely empty. Never deletes a directory that still holds other files. |
+| `--force` | Skip the confirmation prompt (needed for unattended runs). |
+
+Only the files a media row owns are touched: the original (`file_name`), its generated
+conversions and the files listed in `responsive_images`. Directories are never listed and
+copied wholesale, so a directory shared with unrelated files (for example `{id}/` on a disk
+used by several databases that each number media from 1) is safe. A missing original fails
+that media; a missing conversion or responsive image is skipped.
+
+Conversions are moved only when `conversions_disk` is the `--from` disk, so originals and
+conversions stored on different disks can be moved separately. A media whose copy fails keeps
+its row and its source files. The error is listed and the run continues with the next media.
+The command exits with a failure code when any media failed.
+
+The command works on the default connection of the configured media model, so in a multi-tenant
+application you run it once per tenant with your tenancy package's own runner.
+
+### Local disk to S3
+
+```bash
+php artisan media-manager:move-disk --from=media --to=s3 --dry-run
+php artisan media-manager:move-disk --from=media --to=s3 --force
+# once the application reads from s3 without problems:
+php artisan media-manager:move-disk --from=media --to=s3 --delete-source --force
+```
+
+Re-running is safe. Files already at the destination with a matching size are not copied
+again, and an interrupted run finishes on the next pass.
+
+### Changing the path layout on the same disk
+
+To move from `DefaultPathGenerator` (`{id}/`) to your own generator:
+
+1. Deploy the new generator class, leaving `media-library.path_generator` unchanged.
+2. Copy the files into the new layout:
+
+   ```bash
+   php artisan media-manager:move-disk --from=media --to=media \
+       --to-path-generator="App\\Support\\Media\\MyPathGenerator" --force
+   ```
+
+3. Set `media-library.path_generator` to the new class and deploy.
+4. Sweep anything uploaded between steps 2 and 3, and remove the old files:
+
+   ```bash
+   php artisan media-manager:move-disk --from=media --to=media \
+       --from-path-generator="Spatie\\MediaLibrary\\Support\\PathGenerator\\DefaultPathGenerator" \
+       --delete-source --force
+   ```
+
+The command refuses to run when `--from` equals `--to` and both generators resolve to the same class.
+
 ## Documentation
 
 For detailed documentation, see the [docs](docs/README.md) directory:
