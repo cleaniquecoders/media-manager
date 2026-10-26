@@ -2,6 +2,20 @@
 
 All notable changes to `media-manager` will be documented in this file.
 
+## 1.3.0 - 2026-10-26
+
+### Added
+
+- `media-manager:move-disk` command: moves Media Library files between disks (e.g. local → S3) and/or between path layouts (e.g. `{id}/` → a custom path generator), then updates each row's `disk` and `conversions_disk`.
+  - Options: `--from`, `--to`, `--from-path-generator`, `--to-path-generator`, `--collection`, `--chunk`, `--dry-run`, `--delete-source`, `--force`.
+  - Only touches the files each row owns: the original, generated conversions and responsive images. Directories are never enumerated, so other files in a shared directory are left alone.
+  - Files are streamed (`readStream`/`writeStream`, never `path()`) and sizes are checked. If any file of a media fails, its row and source files are left untouched and the run continues.
+  - Re-runs resume cleanly. Rows are updated without firing model events or touching `updated_at`.
+  - Tenant-agnostic: in a multi-database app, run it per tenant (e.g. through `tenants:artisan`).
+  
+
+**Full Changelog**: https://github.com/cleaniquecoders/media-manager/compare/1.2.3...1.3.0
+
 ## 1.2.3 - 2026-10-26
 
 ### Fixed
@@ -68,6 +82,7 @@ This release introduces Livewire 4 support and restructures the package to follo
 
 
 
+
 ```
 ###### Component-First Architecture
 
@@ -91,12 +106,14 @@ Route::get('/media', function () {
 
 
 
+
 ```
 ```blade
 {{-- resources/views/media.blade.php --}}
 <x-app-layout>
     <livewire:media-manager::browser />
 </x-app-layout>
+
 
 
 
@@ -121,6 +138,7 @@ Internal Livewire component classes have been renamed for Livewire 4 compatibili
 <livewire:media-manager::uploader />
 <livewire:media-manager::collection />
 <livewire:media-manager::picker />
+
 
 
 
@@ -181,6 +199,7 @@ return [
 
 
 
+
 ```
 ##### Migration Guide
 
@@ -190,6 +209,7 @@ return [
 
 ```bash
 php artisan vendor:publish --tag="media-manager-config" --force
+
 
 
 
@@ -208,6 +228,7 @@ Route::get('/media', function () {
 
 
 
+
 ```
 3. Create the view with your layout:
 
@@ -221,11 +242,13 @@ Route::get('/media', function () {
 
 
 
+
 ```
 4. If using Livewire 3, update your config:
 
 ```php
 'livewire' => 'v3',
+
 
 
 
@@ -289,6 +312,7 @@ Component usage remains the same across both Livewire versions:
 
 
 
+
   ```
 ##### Breaking Changes
 
@@ -300,6 +324,7 @@ No action required. Simply update to v1.0.1:
 
 ```bash
   composer update cleaniquecoders/media-manager                                                                               
+
 
 
 
@@ -332,7 +357,8 @@ We're excited to announce the first stable release of **Media Manager** - a Lara
   composer require cleaniquecoders/media-manager                                                                
 ```
 ##### Documentation
-
 For detailed usage and configuration, please refer to the [docs/](https://github.com/cleaniquecoders/media-manager/tree/main/docs).
+
+```
 
 ```
